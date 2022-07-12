@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import Layout from './components/Layout';
+import {Route,Routes} from 'react-router-dom'
+import Coins from './pages/Coins';
+import { useEffect } from 'react';
+import {getCoin} from './api/getApi';
+import { useState } from 'react';
+import CoinItem from './pages/CoinItem';
+const App = () => {
+  const [coins, setCoins] = useState([])
 
-function App() {
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const  getData = await getCoin()
+       
+        setCoins(getData)
+
+    }
+    fetchData()
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Layout>
+        <Routes>
+        <Route path='/' element={<Coins coins={coins}/>} />
+        <Route path='/coin/:id' element={<CoinItem/>} />
+        </Routes>
+      </Layout>
+    </>
   );
-}
+};
 
 export default App;
